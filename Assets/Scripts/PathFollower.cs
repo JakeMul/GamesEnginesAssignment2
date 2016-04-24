@@ -9,7 +9,8 @@ public class PathFollower : MonoBehaviour {
     public float mass = 1.0f;
     public float maxSpeed = 5.0f;
     public GameObject missile;
-    public AudioClip shoot;
+    public AudioClip shootprojectile;
+    public AudioClip shootmissile;
     private AudioSource source;
     private GameObject MissileTarget;
     private RaycastHit hit;
@@ -31,7 +32,7 @@ public class PathFollower : MonoBehaviour {
         line.SetWidth(0.1f, 0.1f);
         line.SetVertexCount(2);
         source.pitch = Random.Range(lowPitchRange, highPitchRange);
-        source.PlayOneShot(shoot);
+        source.PlayOneShot(shootprojectile);
         yield return new WaitForSeconds(1.0f);
         beinghandled = false;
     }
@@ -41,7 +42,7 @@ public class PathFollower : MonoBehaviour {
         beinghandled = true;
         // Use a line renderer
         Instantiate(missile, this.transform.position, Quaternion.identity);
-        LineRenderer line = missile.AddComponent<LineRenderer>();
+        //LineRenderer line = missile.AddComponent<LineRenderer>();
         missile.AddComponent<MissileAI>();
         missile.GetComponent<MissileAI>().pursueEnabled = true;
         missile.GetComponent<MissileAI>().pursueTarget = MissileTarget;
@@ -50,7 +51,7 @@ public class PathFollower : MonoBehaviour {
         //line.SetWidth(0.1f, 0.1f);
         //line.SetVertexCount(2);
         source.pitch = Random.Range(lowPitchRange, highPitchRange);
-        source.PlayOneShot(shoot);
+        source.PlayOneShot(shootmissile);
         yield return new WaitForSeconds(1.0f);
         beinghandled = false;
     }
@@ -83,7 +84,6 @@ public class PathFollower : MonoBehaviour {
         // Follow the path
         if (Vector3.Distance(waypoints[currentWaypoint], transform.position) < 1.0f)
         {
-            
             currentWaypoint = (currentWaypoint + 1) % waypoints.Count;
         }
         Vector3 desired = waypoints[currentWaypoint] - transform.position;
@@ -96,11 +96,11 @@ public class PathFollower : MonoBehaviour {
         transform.Translate(velocity * Time.deltaTime, Space.World);
         transform.forward = velocity;
 
-        if (Physics.Raycast(transform.position, transform.forward, 300) && !beinghandled)
-        {
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 300) && !beinghandled)
+        { 
             print("There is something in front of the object!");
-            MissileTarget = hit.transform.gameObject;
-            StartCoroutine("fireProjectile");
+            MissileTarget = hit.collider.gameObject;
+            //StartCoroutine("fireProjectile");
             StartCoroutine("fireMissile");
         }
         else

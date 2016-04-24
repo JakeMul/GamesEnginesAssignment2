@@ -8,8 +8,8 @@ public class MissileAI : MonoBehaviour {
     public Vector3 force;
     public float mass = 1.0f;
 
-    public float maxSpeed = 5.0f;
-    public float maxForce = 5.0f;
+    public float maxSpeed = 30.0f;
+    public float maxForce = 10.0f;
 
     public bool pursueEnabled;
     public GameObject pursueTarget;
