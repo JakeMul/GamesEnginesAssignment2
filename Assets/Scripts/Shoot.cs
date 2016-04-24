@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Shoot : MonoBehaviour {
-    public float speed = 10.0f;
+    public float speed = 30.0f;
 	// Use this for initialization
 	void Start () {
 	
@@ -14,6 +14,6 @@ public class Shoot : MonoBehaviour {
         LineRenderer line = GetComponent<LineRenderer>();
         line.SetPosition(0, transform.position + transform.forward);
         line.SetPosition(1, transform.position - transform.forward);
-
+        Destroy(this.gameObject, 10.0f);
     }
 }

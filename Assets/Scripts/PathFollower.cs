@@ -10,6 +10,8 @@ public class PathFollower : MonoBehaviour {
     public float maxSpeed = 5.0f;
     public AudioClip shoot;
     private AudioSource source;
+    private float lowPitchRange = .75F;
+    private float highPitchRange = 1F;
 
     System.Collections.IEnumerator fireProjectile()
     {
@@ -25,8 +27,9 @@ public class PathFollower : MonoBehaviour {
             line.SetColors(Color.red, Color.blue);
             line.SetWidth(0.1f, 0.1f);
             line.SetVertexCount(2);
+            source.pitch = Random.Range(lowPitchRange, highPitchRange);
             source.PlayOneShot(shoot);
-            yield return new WaitForSeconds(2.0f);
+            yield return new WaitForSeconds(Random.Range(2.0f, 10.0f));
         }
     }
 
@@ -48,6 +51,9 @@ public class PathFollower : MonoBehaviour {
     // Use this for initialization
     void Start () {
         source = GetComponent<AudioSource>();
+        source.maxDistance = 15.0f;
+        source.minDistance = 1.0f;
+        source.dopplerLevel = 0.1f;
         StartCoroutine("fireProjectile");
     }
 	
