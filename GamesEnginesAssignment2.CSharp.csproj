@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\CirclePath.cs" />
     <Compile Include="Assets\Scripts\CrazyCircleMaker.cs" />
     <Compile Include="Assets\Scripts\FPSController.cs" />
+    <Compile Include="Assets\Scripts\MissileAI.cs" />
     <Compile Include="Assets\Scripts\PathFollower.cs" />
     <Compile Include="Assets\Scripts\Shoot.cs" />
   </ItemGroup>
