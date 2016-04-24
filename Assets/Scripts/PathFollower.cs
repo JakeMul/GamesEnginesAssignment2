@@ -12,28 +12,28 @@ public class PathFollower : MonoBehaviour {
     private AudioSource source;
     private float lowPitchRange = .75F;
     private float highPitchRange = 1F;
+    private bool beinghandled;
 
     System.Collections.IEnumerator fireProjectile()
     {
-        while (true)
-        {
-            // Use a line renderer
-            GameObject lazer = new GameObject();
-            lazer.transform.position = transform.position;
-            lazer.transform.rotation = transform.rotation;
-            LineRenderer line = lazer.AddComponent<LineRenderer>();
-            lazer.AddComponent<Shoot>();
-            line.material = new Material(Shader.Find("Particles/Additive"));
-            line.SetColors(Color.red, Color.blue);
-            line.SetWidth(0.1f, 0.1f);
-            line.SetVertexCount(2);
-            source.pitch = Random.Range(lowPitchRange, highPitchRange);
-            source.PlayOneShot(shoot);
-            yield return new WaitForSeconds(Random.Range(2.0f, 10.0f));
-        }
+        beinghandled = true;
+        // Use a line renderer
+        GameObject lazer = new GameObject();
+        lazer.transform.position = transform.position;
+        lazer.transform.rotation = transform.rotation;
+        LineRenderer line = lazer.AddComponent<LineRenderer>();
+        lazer.AddComponent<Shoot>();
+        line.material = new Material(Shader.Find("Particles/Additive"));
+        line.SetColors(Color.red, Color.blue);
+        line.SetWidth(0.1f, 0.1f);
+        line.SetVertexCount(2);
+        source.pitch = Random.Range(lowPitchRange, highPitchRange);
+        source.PlayOneShot(shoot);
+        yield return new WaitForSeconds(.05f);
+        beinghandled = false;
     }
 
-
+  
     void OnDrawGizmos()
     {
         // Draw the path
@@ -54,7 +54,6 @@ public class PathFollower : MonoBehaviour {
         source.maxDistance = 15.0f;
         source.minDistance = 1.0f;
         source.dopplerLevel = 0.1f;
-        StartCoroutine("fireProjectile");
     }
 	
 	// Update is called once per frame
@@ -62,6 +61,7 @@ public class PathFollower : MonoBehaviour {
         // Follow the path
         if (Vector3.Distance(waypoints[currentWaypoint], transform.position) < 1.0f)
         {
+            
             currentWaypoint = (currentWaypoint + 1) % waypoints.Count;
         }
         Vector3 desired = waypoints[currentWaypoint] - transform.position;
@@ -73,5 +73,16 @@ public class PathFollower : MonoBehaviour {
         velocity += acceleration * Time.deltaTime;
         transform.Translate(velocity * Time.deltaTime, Space.World);
         transform.forward = velocity;
+
+        if (Physics.Raycast(transform.position, transform.forward, 300) && !beinghandled)
+        {
+            print("There is something in front of the object!");
+            StartCoroutine("fireProjectile");
+        }
+        else
+        {
+            StopCoroutine("fireProjectile");
+        }
+
     }
 }
