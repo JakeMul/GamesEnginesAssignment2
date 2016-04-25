@@ -33,8 +33,17 @@ public class MissileAI : MonoBehaviour {
         return desired - velocity;
     }
 
-    // Use this for initialization
-    void Start () {
+    void OnCollisionEnter(Collision mycol)
+    {
+
+        if (mycol.gameObject.tag == "enemy")
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+        // Use this for initialization
+        void Start () {
 	
 	}
 	
@@ -57,5 +66,6 @@ public class MissileAI : MonoBehaviour {
         {
             transform.forward = velocity;
         }
+
     }
 }

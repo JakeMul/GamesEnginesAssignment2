@@ -17,9 +17,11 @@ public class PathFollower : MonoBehaviour {
     private float lowPitchRange = .75F;
     private float highPitchRange = 1F;
     private bool beinghandled;
+    int coroutinecalls = 0;
 
     System.Collections.IEnumerator fireProjectile()
     {
+        coroutinecalls += 1;
         beinghandled = true;
         // Use a line renderer
         GameObject lazer = new GameObject();
@@ -37,13 +39,15 @@ public class PathFollower : MonoBehaviour {
         beinghandled = false;
     }
 
+
+    
     System.Collections.IEnumerator fireMissile()
     {
         beinghandled = true;
         // Use a line renderer
         Instantiate(missile, this.transform.position, Quaternion.identity);
         //LineRenderer line = missile.AddComponent<LineRenderer>();
-        missile.AddComponent<MissileAI>();
+        //missile.AddComponent<MissileAI>();
         missile.GetComponent<MissileAI>().pursueEnabled = true;
         missile.GetComponent<MissileAI>().pursueTarget = MissileTarget;
         //line.material = new Material(Shader.Find("Particles/Additive"));
@@ -96,17 +100,21 @@ public class PathFollower : MonoBehaviour {
         transform.Translate(velocity * Time.deltaTime, Space.World);
         transform.forward = velocity;
 
-        if (Physics.Raycast(transform.position, transform.forward, out hit, 300) && !beinghandled)
-        { 
-            print("There is something in front of the object!");
-            MissileTarget = hit.collider.gameObject;
-            //StartCoroutine("fireProjectile");
-            StartCoroutine("fireMissile");
-        }
-        else
+        if (coroutinecalls < 2)
         {
-            StopCoroutine("fireProjectile");
+            if (Physics.Raycast(transform.position, transform.forward, out hit, 300) && !beinghandled)
+            {
+                print("There is something in front of the object!");
+                MissileTarget = hit.collider.gameObject;
+                //StartCoroutine("fireProjectile");
+                StartCoroutine("fireMissile");
+            }
+            else
+            {
+                StopCoroutine("fireProjectile");
+            }
         }
+        
 
     }
 }
