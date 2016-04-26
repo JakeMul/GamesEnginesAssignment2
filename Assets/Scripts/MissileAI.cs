@@ -34,10 +34,11 @@ public class MissileAI : MonoBehaviour {
     }
 
     void OnCollisionEnter(Collision mycol)
-    {
-
-        if (mycol.gameObject.tag == "enemy")
+    {      
+        if (mycol.gameObject.CompareTag("enemy")) 
         {
+            print("Collision");
+            Destroy(mycol.gameObject);
             Destroy(this.gameObject);
         }
     }

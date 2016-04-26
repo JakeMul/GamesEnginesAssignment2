@@ -104,7 +104,7 @@ public class PathFollower : MonoBehaviour {
         {
             if (Physics.Raycast(transform.position, transform.forward, out hit, 300) && !beinghandled)
             {
-                print("There is something in front of the object!");
+                //print("There is something in front of the object!");
                 MissileTarget = hit.collider.gameObject;
                 //StartCoroutine("fireProjectile");
                 StartCoroutine("fireMissile");
