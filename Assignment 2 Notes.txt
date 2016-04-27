@@ -1,0 +1,6 @@
+Assignment 2 notes
+
+Issues
+>Camera gets destroyed along with ship causing an issue with accessing its transform
+>Sometimes the first missile will not track a target
+>Explosion sound will not play if corresponding object is destroyed

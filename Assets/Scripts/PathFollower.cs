@@ -8,59 +8,8 @@ public class PathFollower : MonoBehaviour {
     int currentWaypoint = 0;
     public float mass = 1.0f;
     public float maxSpeed = 5.0f;
-    public GameObject missile;
-    public AudioClip shootprojectile;
-    public AudioClip shootmissile;
-    private AudioSource source;
-    private GameObject MissileTarget;
-    private RaycastHit hit;
-    private float lowPitchRange = .75F;
-    private float highPitchRange = 1F;
-    private bool beinghandled;
-    int coroutinecalls = 0;
-
-    System.Collections.IEnumerator fireProjectile()
-    {
-        coroutinecalls += 1;
-        beinghandled = true;
-        // Use a line renderer
-        GameObject lazer = new GameObject();
-        lazer.transform.position = transform.position;
-        lazer.transform.rotation = transform.rotation;
-        LineRenderer line = lazer.AddComponent<LineRenderer>();
-        lazer.AddComponent<Shoot>();
-        line.material = new Material(Shader.Find("Particles/Additive"));
-        line.SetColors(Color.red, Color.blue);
-        line.SetWidth(0.1f, 0.1f);
-        line.SetVertexCount(2);
-        source.pitch = Random.Range(lowPitchRange, highPitchRange);
-        source.PlayOneShot(shootprojectile);
-        yield return new WaitForSeconds(1.0f);
-        beinghandled = false;
-    }
-
 
     
-    System.Collections.IEnumerator fireMissile()
-    {
-        beinghandled = true;
-        // Use a line renderer
-        Instantiate(missile, this.transform.position, Quaternion.identity);
-        //LineRenderer line = missile.AddComponent<LineRenderer>();
-        //missile.AddComponent<MissileAI>();
-        missile.GetComponent<MissileAI>().pursueEnabled = true;
-        missile.GetComponent<MissileAI>().pursueTarget = MissileTarget;
-        //line.material = new Material(Shader.Find("Particles/Additive"));
-        //line.SetColors(Color.red, Color.blue);
-        //line.SetWidth(0.1f, 0.1f);
-        //line.SetVertexCount(2);
-        source.pitch = Random.Range(lowPitchRange, highPitchRange);
-        source.PlayOneShot(shootmissile);
-        yield return new WaitForSeconds(1.0f);
-        beinghandled = false;
-    }
-
-
     void OnDrawGizmos()
     {
         // Draw the path
@@ -74,13 +23,11 @@ public class PathFollower : MonoBehaviour {
             Gizmos.DrawWireSphere(next, 0.1f);
         }
     }
+    
 
     // Use this for initialization
     void Start () {
-        source = GetComponent<AudioSource>();
-        source.maxDistance = 15.0f;
-        source.minDistance = 1.0f;
-        source.dopplerLevel = 0.1f;
+      
     }
 	
 	// Update is called once per frame
@@ -100,20 +47,6 @@ public class PathFollower : MonoBehaviour {
         transform.Translate(velocity * Time.deltaTime, Space.World);
         transform.forward = velocity;
 
-        if (coroutinecalls < 2)
-        {
-            if (Physics.Raycast(transform.position, transform.forward, out hit, 300) && !beinghandled)
-            {
-                //print("There is something in front of the object!");
-                MissileTarget = hit.collider.gameObject;
-                //StartCoroutine("fireProjectile");
-                StartCoroutine("fireMissile");
-            }
-            else
-            {
-                StopCoroutine("fireProjectile");
-            }
-        }
         
 
     }

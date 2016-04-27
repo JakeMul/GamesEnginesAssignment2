@@ -3,8 +3,19 @@ using System.Collections;
 
 public class Shoot : MonoBehaviour {
     public float speed = 30.0f;
-	// Use this for initialization
-	void Start () {
+
+    void OnCollisionEnter(Collision mycol)
+    {
+        if (mycol.gameObject.CompareTag("enemy"))
+        {
+            print("Collision");
+            Destroy(mycol.gameObject);
+            Destroy(this.gameObject);
+        }
+    }
+
+    // Use this for initialization
+    void Start () {
 	
 	}
 	
