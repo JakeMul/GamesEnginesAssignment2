@@ -25,6 +25,8 @@ public class WeaponsSystems : MonoBehaviour {
         LineRenderer line = lazer.AddComponent<LineRenderer>();
         lazer.AddComponent<Shoot>();
         lazer.AddComponent<Rigidbody>();
+        lazer.GetComponent<Rigidbody>().useGravity = false;
+        lazer.AddComponent<SphereCollider>();
         lazer.gameObject.tag = "lazer";
         lazer.gameObject.name = "CannonShot";
         line.material = new Material(Shader.Find("Particles/Additive"));
@@ -83,10 +85,10 @@ public class WeaponsSystems : MonoBehaviour {
         {
             if (Physics.Raycast(transform.position, transform.forward, out hit, 300) && !beinghandled)
             {
-                //print("There is something in front of the object!");
+                print("Target Spotted!");
                 MissileTarget = hit.collider.gameObject;
                 StartCoroutine("fireProjectile");
-                //StartCoroutine("fireMissile");
+                StartCoroutine("fireMissile");
             }
             /*
             else

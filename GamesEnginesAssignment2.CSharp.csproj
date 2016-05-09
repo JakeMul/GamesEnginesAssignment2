@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
-    <Compile Include="Assets\Scripts\CircleFollowing.cs" />
     <Compile Include="Assets\Scripts\CirclePath.cs" />
     <Compile Include="Assets\Scripts\CrazyCircleMaker.cs" />
     <Compile Include="Assets\Scripts\FPSController.cs" />
